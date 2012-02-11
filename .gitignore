@@ -1,0 +1,16 @@
+*~
+*.o
+*.bak
+*.lo
+*.la
+.deps
+.libs
+autom4te.cache
+autoscan.log
+config.h
+config.log
+config.status
+Makefile
+src/Makefile
+stamp-h1
+lda_learn
