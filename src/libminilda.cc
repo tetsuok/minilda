@@ -204,7 +204,6 @@ inline int ParseOption(const char* s, int& K, int& num_iter, int& num_word) {
 } // namespace
 
 int lda_learn(int argc, char** argv) {
-  using namespace minilda;
   if (argc < 4) {
     Usage();
     return -1;
@@ -235,9 +234,11 @@ int lda_learn(int argc, char** argv) {
   std::string model_pwz = model_file + ".pwz";
   std::string model_pzd = model_file + ".pzd";
 
-  TinyTimer timer;
+  minilda::TinyTimer timer;
 
-  scoped_ptr<GibbsSampler> gibbs_sampler(GibbsSampler::instance());
+  minilda::scoped_ptr<minilda::GibbsSampler> gibbs_sampler(
+      minilda::GibbsSampler::instance());
+
   gibbs_sampler->set_num_topics(K);
   gibbs_sampler->set_alpha(50.0 / K);
   gibbs_sampler->set_beta(0.1);
