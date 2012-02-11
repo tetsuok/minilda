@@ -164,10 +164,6 @@ double minilda_gibbs_sampler_get_beta(minilda_gibbs_sampler_t *learner) {
   return learner->ptr->get_beta();
 }
 
-const char* minilda_gibbs_sampler_error(minilda_gibbs_sampler_t* learner) {
-  return learner->ptr->what();
-}
-
 namespace {
 
 void Usage() {
@@ -248,28 +244,24 @@ int lda_learn(int argc, char** argv) {
   gibbs_sampler->set_num_word(num_word);
 
   if (!gibbs_sampler->Open(train_file.c_str())) {
-    std::cerr << "cannot open " << train_file
-              << gibbs_sampler->what() << std::endl;
+    std::cerr << "cannot open " << train_file << std::endl;
     return -1;
   }
 
   if (!gibbs_sampler->OpenVocabulary(vocab_file.c_str())) {
-    std::cerr << "cannot open " << vocab_file
-              << gibbs_sampler->what() << std::endl;
+    std::cerr << "cannot open " << vocab_file << std::endl;
     return -1;
   }
 
   gibbs_sampler->Update(num_iter);
 
   if (!gibbs_sampler->SaveWordTopic(model_pwz.c_str())) {
-    std::cerr << "Cannot save " << model_pwz
-              << gibbs_sampler->what() << std::endl;
+    std::cerr << "Cannot save " << model_pwz << std::endl;
     return -1;
   }
 
   if (!gibbs_sampler->SaveDocumentTopic(model_pzd.c_str())) {
-    std::cerr << "Cannot save " << model_pzd
-              << gibbs_sampler->what() << std::endl;
+    std::cerr << "Cannot save " << model_pzd << std::endl;
     return -1;
   }
 

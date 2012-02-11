@@ -41,6 +41,7 @@
 #include "feature.h"
 #include "pcomp.h"
 #include "scoped_ptr.h"
+#include "logging.h"
 
 namespace minilda {
 
@@ -84,8 +85,6 @@ class GibbsSamplerImpl : public GibbsSampler {
   double get_alpha() const { return alpha_; }
   double get_beta() const { return beta_; }
 
-  const char* what() { return what_.str().c_str(); }
-
  private:
   int SelectNextTopic(int doc_id, int word_id);
   void Resample(int token_id);
@@ -110,15 +109,13 @@ class GibbsSamplerImpl : public GibbsSampler {
 
   std::vector<double> p_;
   std::vector<int> z_;                  // topic assignments
-
-  std::ostringstream what_;             // logger of this class
 };
 
 bool GibbsSamplerImpl::Open(const char* filename) {
   std::ifstream ifs(filename);
 
   if (!ifs) {
-    what_ << "no such file or directory " << filename << std::endl;
+    LOG(ERROR) << "no such file or directory " << filename << std::endl;
     return false;
   }
 
@@ -137,7 +134,7 @@ bool GibbsSamplerImpl::Open(const char* filename) {
   N = atoi(line.c_str());
 
   if (N <= 0) {
-    what_ << "N is invalid: " << N;
+    LOG(ERROR) << "N is invalid: " << N;
     return false;
   }
 
@@ -147,8 +144,9 @@ bool GibbsSamplerImpl::Open(const char* filename) {
     std::getline(ifs, line);
     if (line[0] == '#' || line.empty()) continue;
 
-    if (features_->Parse(line)) {
-      what_ << "line: " << line_num;
+    if (!features_->Parse(line)) {
+      LOG(ERROR) << "invalid line: " << line_num;
+      return false;
     }
     ++line_num;
   }
@@ -163,7 +161,7 @@ bool GibbsSamplerImpl::OpenVocabulary(const char* filename) {
   std::ifstream ifs(filename);
 
   if (!ifs) {
-    what_ << "no such file or directory" << filename << std::endl;
+    LOG(ERROR) << "no such file or directory" << filename << std::endl;
     return false;
   }
 
@@ -181,7 +179,7 @@ bool GibbsSamplerImpl::OpenVocabulary(const char* filename) {
 bool GibbsSamplerImpl::SaveWordTopic(const char* filename) {
   std::ofstream ofs(filename);
   if (!ofs) {
-    what_ << "Cannot open " << filename;
+    LOG(ERROR) << "Cannot open " << filename;
     return false;
   }
 
@@ -219,7 +217,7 @@ bool GibbsSamplerImpl::SaveWordTopic(const char* filename) {
 bool GibbsSamplerImpl::SaveDocumentTopic(const char* filename) {
   std::ofstream ofs(filename);
   if (!ofs) {
-    what_ << "Cannot open " << filename;
+    LOG(ERROR) << "Cannot open " << filename;
     return false;
   }
 

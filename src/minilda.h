@@ -121,8 +121,6 @@ extern "C" {
   MINILDA_DLL_EXTERN double minilda_gibbs_sampler_get_alpha(minilda_gibbs_sampler_t *learner);
 
   MINILDA_DLL_EXTERN double minilda_gibbs_sampler_get_beta(minilda_gibbs_sampler_t *learner);
-
-  MINILDA_DLL_EXTERN const char* minilda_gibbs_sampler_error(minilda_gibbs_sampler_t* learner);
 #endif  // SWIG
 
 #ifdef __cplusplus
@@ -205,8 +203,6 @@ class GibbsSampler {
 
   // Get hyper parameter beta
   virtual double get_beta() const = 0;
-
-  virtual const char* what() = 0;
 
   // Get instance
   static GibbsSampler *instance();
