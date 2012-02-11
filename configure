@@ -746,6 +746,15 @@ OTOOL64
 CXXCPP
 GCC_TRUE
 GCC_FALSE
+GTEST_CONFIG
+GTEST_CPPFLAGS
+GTEST_CXXFLAGS
+GTEST_LDFLAGS
+GTEST_LIBS
+GTEST_VERSION
+HAVE_GTEST
+HAVE_GTEST_TRUE
+HAVE_GTEST_FALSE
 LIBOBJS
 LTLIBOBJS'
 ac_subst_files=''
@@ -761,7 +770,13 @@ CCC
 CC
 CFLAGS
 CPP
-CXXCPP'
+CXXCPP
+GTEST_CONFIG
+GTEST_CPPFLAGS
+GTEST_CXXFLAGS
+GTEST_LDFLAGS
+GTEST_LIBS
+GTEST_VERSION'
 
 
 # Initialize some variables set by options.
@@ -1348,6 +1363,8 @@ Optional Features:
   --enable-fast-install[=PKGS]
                           optimize for fast installation [default=yes]
   --disable-libtool-lock  avoid locking (might break parallel builds)
+  --enable-gtest          Enable tests using the Google C++ Testing Framework.
+                          (Default is enabled.)
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -1368,6 +1385,17 @@ Some influential environment variables:
   CFLAGS      C compiler flags
   CPP         C preprocessor
   CXXCPP      C++ preprocessor
+  GTEST_CONFIG
+              The exact path of Google Test's 'gtest-config' script.
+  GTEST_CPPFLAGS
+              C-like preprocessor flags for Google Test.
+  GTEST_CXXFLAGS
+              C++ compile flags for Google Test.
+  GTEST_LDFLAGS
+              Linker path and option flags for Google Test.
+  GTEST_LIBS  Library linking flags for Google Test.
+  GTEST_VERSION
+              The version of Google Test available.
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
@@ -18579,6 +18607,144 @@ test -z "$INSTALL_SCRIPT" && INSTALL_SCRIPT='${INSTALL}'
 
 test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 
+
+# Check whether --enable-gtest was given.
+if test "${enable_gtest+set}" = set; then
+  enableval=$enable_gtest;
+else
+  enable_gtest=no
+fi
+
+
+
+
+
+
+
+
+HAVE_GTEST="no"
+if test "x${enable_gtest}" != "xno"; then
+  { echo "$as_me:$LINENO: checking for 'gtest-config'" >&5
+echo $ECHO_N "checking for 'gtest-config'... $ECHO_C" >&6; }
+   if test "x${enable_gtest}" != "xyes"; then
+  if test -x "${enable_gtest}/scripts/gtest-config"; then
+  GTEST_CONFIG="${enable_gtest}/scripts/gtest-config"
+else
+  GTEST_CONFIG="${enable_gtest}/bin/gtest-config"
+fi
+
+      if test -x "${GTEST_CONFIG}"; then
+  :
+else
+  { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+         { { echo "$as_me:$LINENO: error: Unable to locate either a built or installed Google Test.
+The specific location '${enable_gtest}' was provided for a built or installed
+Google Test, but no 'gtest-config' script could be found at this location." >&5
+echo "$as_me: error: Unable to locate either a built or installed Google Test.
+The specific location '${enable_gtest}' was provided for a built or installed
+Google Test, but no 'gtest-config' script could be found at this location." >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+
+else
+  # Extract the first word of "gtest-config", so it can be a program name with args.
+set dummy gtest-config; ac_word=$2
+{ echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
+if test "${ac_cv_path_GTEST_CONFIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $GTEST_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_GTEST_CONFIG="$GTEST_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_path_GTEST_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+IFS=$as_save_IFS
+
+  ;;
+esac
+fi
+GTEST_CONFIG=$ac_cv_path_GTEST_CONFIG
+if test -n "$GTEST_CONFIG"; then
+  { echo "$as_me:$LINENO: result: $GTEST_CONFIG" >&5
+echo "${ECHO_T}$GTEST_CONFIG" >&6; }
+else
+  { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+fi
+
+
+fi
+
+   if test -x "${GTEST_CONFIG}"; then
+  { echo "$as_me:$LINENO: result: ${GTEST_CONFIG}" >&5
+echo "${ECHO_T}${GTEST_CONFIG}" >&6; }
+      _gtest_min_version="--min-version=1.0"
+         { echo "$as_me:$LINENO: checking for Google Test at least version >= 1.0" >&5
+echo $ECHO_N "checking for Google Test at least version >= 1.0... $ECHO_C" >&6; }
+      if ${GTEST_CONFIG} ${_gtest_min_version}; then
+  { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+         HAVE_GTEST='yes'
+else
+  { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+fi
+
+else
+  { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+fi
+
+   if test "x${HAVE_GTEST}" = "xyes"; then
+  GTEST_CPPFLAGS=`${GTEST_CONFIG} --cppflags`
+      GTEST_CXXFLAGS=`${GTEST_CONFIG} --cxxflags`
+      GTEST_LDFLAGS=`${GTEST_CONFIG} --ldflags`
+      GTEST_LIBS=`${GTEST_CONFIG} --libs`
+      GTEST_VERSION=`${GTEST_CONFIG} --version`
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_GTEST 1
+_ACEOF
+
+else
+  if test "x${enable_gtest}" = "xyes"; then
+  { { echo "$as_me:$LINENO: error: Google Test was enabled, but no viable version could be found." >&5
+echo "$as_me: error: Google Test was enabled, but no viable version could be found." >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+
+fi
+
+fi
+
+
+ if test "x$HAVE_GTEST" = "xyes"; then
+  HAVE_GTEST_TRUE=
+  HAVE_GTEST_FALSE='#'
+else
+  HAVE_GTEST_TRUE='#'
+  HAVE_GTEST_FALSE=
+fi
+
+
+
 ac_config_files="$ac_config_files Makefile src/Makefile"
 
 cat >confcache <<\_ACEOF
@@ -18716,6 +18882,13 @@ if test -z "${GCC_TRUE}" && test -z "${GCC_FALSE}"; then
   { { echo "$as_me:$LINENO: error: conditional \"GCC\" was never defined.
 Usually this means the macro was only invoked conditionally." >&5
 echo "$as_me: error: conditional \"GCC\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${HAVE_GTEST_TRUE}" && test -z "${HAVE_GTEST_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"HAVE_GTEST\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"HAVE_GTEST\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
@@ -19765,11 +19938,20 @@ OTOOL64!$OTOOL64$ac_delim
 CXXCPP!$CXXCPP$ac_delim
 GCC_TRUE!$GCC_TRUE$ac_delim
 GCC_FALSE!$GCC_FALSE$ac_delim
+GTEST_CONFIG!$GTEST_CONFIG$ac_delim
+GTEST_CPPFLAGS!$GTEST_CPPFLAGS$ac_delim
+GTEST_CXXFLAGS!$GTEST_CXXFLAGS$ac_delim
+GTEST_LDFLAGS!$GTEST_LDFLAGS$ac_delim
+GTEST_LIBS!$GTEST_LIBS$ac_delim
+GTEST_VERSION!$GTEST_VERSION$ac_delim
+HAVE_GTEST!$HAVE_GTEST$ac_delim
+HAVE_GTEST_TRUE!$HAVE_GTEST_TRUE$ac_delim
+HAVE_GTEST_FALSE!$HAVE_GTEST_FALSE$ac_delim
 LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 16; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 25; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

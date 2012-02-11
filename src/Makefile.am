@@ -23,6 +23,19 @@ libminilda_la_SOURCES = \
 
 include_HEADERS = minilda.h
 
-bin_PROGRAMS = lda_learn
+bin_PROGRAMS = lda_learn lda_infer
 lda_learn_SOURCES = lda_learn.cc
 lda_learn_LDADD = libminilda.la
+
+lda_infer_SOURCES = lda_infer.cc
+lda_infer_LDADD = libminilda.la
+
+# unit tests using Google Test.
+if HAVE_GTEST
+check_PROGRAMS =
+
+# unit tests you want to run when people type 'make check'.
+TESTHARNESS = testharness.cc
+
+TESTS =
+endif

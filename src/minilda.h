@@ -53,7 +53,9 @@ extern "C" {
   typedef struct minilda_gibbs_sampler_t minilda_gibbs_sampler_t;
 
   // C interface
-  MINILDA_DLL_EXTERN int lda_learn(int argc, char **argv);
+  MINILDA_DLL_EXTERN int lda_learn(int argc, char** argv);
+
+  MINILDA_DLL_EXTERN int lda_infer(int argc, char** argv);
 
   // Gibbs sampler
   MINILDA_DLL_EXTERN minilda_gibbs_sampler_t* minilda_gibbs_sampler_new();

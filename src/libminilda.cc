@@ -277,3 +277,8 @@ int lda_learn(int argc, char** argv) {
 
   return 0;
 }
+
+int lda_infer(int argc, char** argv) {
+  // Write inference programs here.
+  return 0;
+}

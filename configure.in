@@ -47,4 +47,6 @@ AC_CHECK_SIZEOF(size_t)
 AC_CHECK_FUNCS([gettimeofday])
 
 AC_PROG_INSTALL
+GTEST_LIB_CHECK(1.0)
+
 AC_OUTPUT([Makefile src/Makefile])
